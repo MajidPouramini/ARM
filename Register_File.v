@@ -5,7 +5,7 @@ module Register_File (
   output [31:0] reg_1, reg_2
 );
 
-  reg [31:0] registers[0:15];
+  reg [31:0] registers[0:14];
 
   assign reg1 = registers[src_1];
   assign reg2 = registers[src_2];
@@ -14,14 +14,14 @@ module Register_File (
 
   always @(negedge clk, posedge rst) begin
     if (rst) begin
-      for(i = 0; i < 16; i = i + 1)
-        registers[i] <= 32'b0;
+      for(i = 0; i < 15; i = i + 1)
+        registers[i] <= i;
     end
     else if (write_back_en) begin
       registers[WB_dest] = WB_result;
     end
     else begin
-      for(i = 0; i < 16; i = i + 1)
+      for(i = 0; i < 15; i = i + 1)
         registers[i] <= registers[i];
     end
 	end

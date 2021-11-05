@@ -1,25 +1,25 @@
 module IF_Stage_Reg (
-  input clk, rst, freez, flush,
-  input [31:0] PC_in, Instruction_in,
-  output reg [31:0] PC, Instruction
-  );
+  input clk, rst, freeze, flush,
+  input [31:0] pc_in, instruction_in,
+  output reg [31:0] pc_out, instruction_out
+);
   
   always@(posedge clk, posedge rst) begin
     if (rst) begin
-      PC <= 32'b0;
-      Instruction <= 32'b0;
+      pc_out <= 32'b0;
+      instruction_out <= 32'b0;
     end
     else if (flush) begin
-      PC <= 32'b0;
-      Instruction <= 32'b0;
+      pc_out <= 32'b0;
+      instruction_out <= 32'b0;
     end
     else if (clk) begin
-      PC <= PC_in;
-      Instruction <= Instruction_in;
+      pc_out <= pc_in;
+      instruction_out <= instruction_in;
     end
     else begin
-      PC <= PC;
-      Instruction <= Instruction;
+      pc_out <= pc_out;
+      instruction_out <= instruction_out;
     end
   end
     

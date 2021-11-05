@@ -1,10 +1,12 @@
-module MUX (
-  input [31:0] in1, in2, 
+module MUX #(
+  parameter LENGTH = 1
+  ) (
+  input [LENGTH-1:0] in_1, in_2, 
   input select,
-  output [31:0] out
-  );
+  output [LENGTH-1:0] out
+);
 
-  assign out = select ? in1 : in2;
+  assign out = select ? in_1 : in_2;
 
 endmodule
 

@@ -1,20 +1,39 @@
 module IF_Stage (
   input clk, rst, freeze, branch_taken,
-  input [31:0] branchAddr,
-  output [31:0] PC, Instruction
-  );
+  input [31:0] branch_addr,
+  output [31:0] pc, instruction
+);
   
   wire[31:0] mux_in, mux_out, pc_increment, pc_in, pc_out;
   
-  MUX mux (branchAddr, mux_in, branch_taken, mux_out);
+  MUX #(.LENGTH(32)) mux (
+    .in_1(branch_addr),
+    .in_2(mux_in),
+    .select(branch_taken),
+
+    .out(mux_out)
+  );
   
-  PC pc(clk, rst, 1'b0, pc_in, pc_out);
+  PC pc_module(
+    .clk(clk),
+    .rst(rst),
+    .freeze(1'b0),
+    .pc_in(pc_in),
+
+    .pc_out(pc_out)
+  );
   
-  Instruction_Memory instruction_memory(clk, rst, pc_out, Instruction);
+  Instruction_Memory instruction_memory(
+    .clk(clk),
+    .rst(rst),
+    .address(pc_out),
+
+    .instruction(instruction)
+  );
   
   assign pc_in = mux_out;
   assign pc_increment = pc_out + 4;
   assign mux_in = pc_increment;
-  assign PC = pc_increment;
+  assign pc = pc_increment;
   
 endmodule

@@ -1,6 +1,6 @@
 module ARM (
   input clk, rst
-  );
+);
   
   wire [31:0] IF_pc_out, IF_instruction_out;
   wire [31:0] ID_pc_in, ID_pc_out, ID_instruction_in;
@@ -8,10 +8,38 @@ module ARM (
   wire [31:0] MEM_pc_in, MEM_pc_out;
   wire [31:0] WB_pc_in, WB_pc_out;
   
-  IF_Stage if_stage (clk, rst, 1'b0, 1'b0, 32'b0, IF_pc_out, IF_instruction_out);
-  IF_Stage_Reg if_stage_reg (clk, rst, 1'b0, 1'b0, IF_pc_out, IF_instruction_out, ID_pc_in, ID_instruction_in);
+  IF_Stage if_stage (
+    .clk(clk),
+    .rst(rst),
+    .freeze(1'b0),
+    .branch_taken(1'b0),
+    .branch_addr(32'b0),
+
+    .pc(IF_pc_out),
+    .instruction(IF_instruction_out)
+  );
+
+  IF_Stage_Reg if_stage_reg (
+    .clk(clk),
+    .rst(rst),
+    .freeze(1'b0),
+    .flush(1'b0),
+    .pc_in(IF_pc_out),
+    .instruction_in(IF_instruction_out),
+    
+    .pc_out(ID_pc_in),
+    .instruction_out(ID_instruction_in)
+  );
   
-  ID_Stage id_stage (clk, rst, ID_pc_in, ID_pc_out);
+  ID_Stage id_stage (
+    .clk(clk),
+    .rst(rst),
+    .hazard(1'b0),
+    .pc_in(ID_pc_in),
+    .instruction(ID_instruction_in),
+    
+    .pc_out(ID_pc_out)
+  );
   ID_Stage_Reg id_stage_reg (clk, rst, ID_pc_out, EXE_pc_in);
   
   EXE_Stage exe_stage (clk, rst, EXE_pc_in, EXE_pc_out);

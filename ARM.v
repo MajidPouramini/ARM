@@ -8,6 +8,7 @@ module ARM (
   wire [31:0] MEM_pc_in, MEM_pc_out;
   wire [31:0] WB_pc_in, WB_pc_out;
   
+  // Instruction Fetch
   IF_Stage if_stage (
     .clk(clk),
     .rst(rst),
@@ -31,6 +32,7 @@ module ARM (
     .instruction_out(ID_instruction_in)
   );
   
+  // Instruction Decode
   ID_Stage id_stage (
     .clk(clk),
     .rst(rst),
@@ -40,6 +42,7 @@ module ARM (
     
     .pc_out(ID_pc_out)
   );
+
   ID_Stage_Reg id_stage_reg (clk, rst, ID_pc_out, EXE_pc_in);
   
   EXE_Stage exe_stage (clk, rst, EXE_pc_in, EXE_pc_out);

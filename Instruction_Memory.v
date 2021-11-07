@@ -4,7 +4,7 @@ module Instruction_Memory (
   output [31:0] instruction
 );
   
-  reg[31:0] memory[0:6];
+  reg[31:0] memory[0:1023];
  
   initial begin
     memory[ 0] = 32'b1110_00_1_1101_0_0000_0001_101000000001; // MOV    R1 ,#4096         //R1 = 4096

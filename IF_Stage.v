@@ -7,8 +7,8 @@ module IF_Stage (
   wire[31:0] mux_in, mux_out, pc_increment, pc_in, pc_out;
   
   MUX #(.LENGTH(32)) mux (
-    .in_1(branch_addr),
-    .in_2(mux_in),
+    .in_1(mux_in),
+    .in_2(branch_addr),
     .select(branch_taken),
 
     .out(mux_out)

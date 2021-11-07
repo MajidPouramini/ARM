@@ -6,7 +6,7 @@ module MUX #(
   output [LENGTH-1:0] out
 );
 
-  assign out = select ? in_1 : in_2;
+  assign out = select ? in_2 : in_1;
 
 endmodule
 

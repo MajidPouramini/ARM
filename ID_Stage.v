@@ -1,6 +1,7 @@
 module ID_Stage (
-  input clk, rst, hazard, WB_dest, WB_value, WB_wb_en, status,
-  input [31:0] pc_in, instruction,
+  input clk, rst, hazard, WB_wb_en,
+  input [3:0] WB_dest, status,
+  input [31:0] pc_in, instruction, WB_value,
   output two_src, imm_out, MEM_r_en_out, MEM_w_en_out, WB_enable_out, s_out, b_out,
   output [3:0] dest, exec_cmd_out,
   output [11:0] shift_operand,
@@ -34,7 +35,7 @@ module ID_Stage (
   wire MEM_r_en, MEM_w_en, WB_enable, s, b;
   wire [3:0] exec_cmd;
 
-  ControlUnit control_unit(
+  Control_Unit control_unit(
 		.mode(instruction[27:26]), 
     .op_code(instruction[24:21]),
 		.s_in(instruction[20]),
@@ -42,7 +43,7 @@ module ID_Stage (
 		.exec_cmd(exec_cmd),
 		.MEM_r_en(MEM_r_en),
     .MEM_w_en(MEM_w_en),
-		.WB_enable(WB_enable),
+		.WB_en(WB_enable),
     .s_out(s),
 		.b(b)
 	);
@@ -66,7 +67,7 @@ module ID_Stage (
     .result(condition_check_out)
   );
 
-  wire mux_2_out;
+  wire [8:0] mux_2_out;
 
   MUX #(.LENGTH(9)) mux_2 (
     .in_1(control_unit_out),

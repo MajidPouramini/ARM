@@ -1,6 +1,6 @@
 `include "Constants.v"
 
-module ConditionCheck (
+module Condition_Check (
   input [3:0] cond,
   input [3:0] status,
   output reg result

@@ -7,8 +7,8 @@ module Register_File (
 
   reg [31:0] registers[0:14];
 
-  assign reg1 = registers[src_1];
-  assign reg2 = registers[src_2];
+  assign reg_1 = registers[src_1];
+  assign reg_2 = registers[src_2];
 
   integer i = 0;
 

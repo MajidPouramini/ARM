@@ -11,7 +11,7 @@ module ARM (
     .clk(clk),
     .rst(rst),
     .freeze(1'b0), // TODO: require hazard detection unit
-    .branch_taken(branch_taken),
+    .branch_taken(1'b0), // TODO: require EXE stage
     .branch_addr(32'b0), // TODO: require EXE stage
 
     .pc(IF_pc_out),
@@ -33,8 +33,9 @@ module ARM (
   wire ID_two_src, ID_imm, ID_MEM_r_en, ID_MEM_w_en, ID_WB_enable, ID_s, ID_b;
   wire [3:0] ID_dest, ID_exec_cmd;
   wire [11:0] ID_shift_operand;
-  wire [11:0] ID_signed_immed_24;
-  wire [23:0] ID_pc_out, ID_val_rm, ID_val_rn;
+  wire [23:0] ID_signed_immed_24;
+  wire [31:0] ID_pc_out, ID_val_rm, ID_val_rn;
+  
   wire [31:0] EXE_pc_in;
   
   // Instruction Decode
@@ -42,10 +43,10 @@ module ARM (
     .clk(clk),
     .rst(rst),
     .hazard(1'b0), // TODO: require hazard detection unit
-    .WB_dest(1'b0), // TODO: require WB stage
-    .WB_value(1'b0), // TODO: require WB stage 
+    .WB_value(32'b0), // TODO: require WB stage 
     .WB_wb_en(1'b0), // TODO: require WB stage
-    .status(1'b0), // TODO: require status register
+    .status(4'b0), // TODO: require status register
+    .WB_dest(4'b0), // TODO: require WB stage
     .pc_in(ID_pc_in),
     .instruction(ID_instruction_in),
 
@@ -96,7 +97,7 @@ module ARM (
     .dest_out(EXE_dest),
     .shift_operand_out(EXE_shift_operand),
     .signed_immed_24_out(EXE_signed_immed_24),
-    .pc_out(EXE_pc),
+    .pc_out(EXE_pc_in),
     .val_rm_out(EXE_val_rm), 
     .val_rn_out(EXE_val_rn)
   );

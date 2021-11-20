@@ -1,66 +1,65 @@
+`include "Constants.v"
+
 module ALU(
-  input [31:0] val1,val2,
-  input [3:0] alu_command,
+  input [31:0] val_1, val_2,
+  input [3:0] exec_cmd,
   input cin,
-  output reg [31:0]  alu_res,
-  output [3:0] status_register
+  output reg [31:0] alu_res,
+  output [3:0] status_bits
 );
   
   reg v, cout;
-  wire z,n;
+  wire z, n;
   
   assign n = alu_res[31];
-  
-  assign z = (alu_res == 32'b0) ? 1 : 0; // ...
-  
-  assign status_register = {z,cout,n,v};
+  assign z = (alu_res == 32'b0) ? 1'b1 : 1'b0;
+  assign status_bits = {z, cout, n, v};
   
   always @(*) begin
-    {cout,v} = 2'b0;
+    cout = 1'b0;
+    v = 1'b0;
     
-    case(alu_command)
+    case(exec_cmd)
       
-      4'b0001:begin
-        alu_res = val2;
+      `MOV_ALU_CMD: begin
+        alu_res = val_2;
       end
       
-      4'b1001: begin
-        alu_res = ~val2;
+      `MVN_ALU_CMD: begin
+        alu_res = ~val_2;
       end
       
-      4'b0010:begin
-        {cout,alu_res} = val1+val2;
-        v = ((val1[31] == val2[31]) & (alu_res[31] != val1[31]));
+      `ADD_ALU_CMD: begin
+        {cout, alu_res} = val_1 + val_2;
+        v = ((val_1[31] == val_2[31]) & (alu_res[31] == ~val_1[31]));
       end
       
-      4'b0011:begin
-        {cout, alu_res} = val1 + val2 + cin;
-        v = ((val1[31] == val2[31]) & (alu_res[31] != val1[31]));
+      `ADC_ALU_CMD: begin
+        {cout, alu_res} = val_1 + val_2 + cin;
+        v = ((val_1[31] == val_2[31]) & (alu_res[31] == ~val_1[31]));
       end
       
-      4'b0100:begin
-        {cout, alu_res} = {val1[31], val1} - {val2[31], val2};
-        v = ((val1[31] == val2[31]) & (alu_res[31] != val1[31]));
-        v = ((val1[31] == ~val2[31]) & (alu_res[31] != val1[31]));
+      `SUB_ALU_CMD: begin
+        {cout, alu_res} = {val_1[31], val_1} - {val_2[31], val_2};
+        v = ((val_1[31] == ~val_2[31]) & (alu_res[31] == ~val_1[31]));
       end
       
-      4'b0101:begin
-        {cout, alu_res} = {val1[31], val1} - {val2[31], val2} - 33'd1;
-        v = ((val1[31] == ~val2[31]) & (alu_res[31] != val1[31]));
+      `SBC_ALU_CMD: begin
+        {cout, alu_res} = {val_1[31], val_1} - {val_2[31], val_2} - cin;
+        v = ((val_1[31] == ~val_2[31]) & (alu_res[31] == ~val_1[31]));
       end
       
-      4'b0110:begin
-        alu_res = val1 & val2;
+      `AND_ALU_CMD: begin
+        alu_res = val_1 & val_2;
       end
       
-      4'b0111:begin
-        alu_res = val1 | val2;
+      `ORR_ALU_CMD: begin
+        alu_res = val_1 | val_2;
       end
       
-      4'b1000:begin
-        alu_res = val1 ^ val2;
+      `EOR_ALU_CMD: begin
+        alu_res = val_1 ^ val_2;
       end
-      
     endcase
   end
 endmodule

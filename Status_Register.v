@@ -1,17 +1,18 @@
-//`include "Constants.v"
 module Status_Register (
     input clk, rst,
-    input s,// s is load signal
-    input [3:0] i_status_bits,
-
-    output reg [3:0] o_status_bits
+    input s,
+    input [3:0] status_bits_in,
+    output reg [3:0] status_bits_out
 );
-
 
 	always@(negedge clk, posedge rst) 
 	begin
-		if (rst) o_status_bits <= 0;
-		else if (s) o_status_bits <= i_status_bits;
+		if (rst) begin:
+		  status_bitsout <= 4'b0;
+		end
+		else if (s) begin:
+      status_bits_out <= status_bits_in;
+    end
 	end
 	
 endmodule

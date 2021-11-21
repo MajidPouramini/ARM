@@ -4,6 +4,7 @@ module ID_Stage_Reg (
   input [11:0] shift_operand_in,
   input [23:0] signed_immed_24_in,
   input [31:0] pc_in, val_rm_in, val_rn_in,
+  
   output reg status_out, imm_out, MEM_r_en_out, MEM_w_en_out, WB_enable_out, s_out, b_out,
   output reg [3:0] exec_cmd_out, dest_out,
   output reg [11:0] shift_operand_out,

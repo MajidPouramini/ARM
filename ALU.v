@@ -4,6 +4,7 @@ module ALU(
   input [31:0] val_1, val_2,
   input [3:0] exec_cmd,
   input cin,
+  
   output reg [31:0] alu_res,
   output [3:0] status_bits
 );

@@ -7,10 +7,10 @@ module Status_Register (
 
 	always@(negedge clk, posedge rst) 
 	begin
-		if (rst) begin:
+		if (rst) begin
 		  status_bitsout <= 4'b0;
 		end
-		else if (s) begin:
+		else if (s) begin
       status_bits_out <= status_bits_in;
     end
 	end

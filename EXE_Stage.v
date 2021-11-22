@@ -5,7 +5,7 @@ module EXE_Stage (
   input [23:0] signed_immed_24,
   input [31:0] val_rm_in, val_rn, pc_in
 
-  output wb_en_out, MEM_r_en_out, MEM_w_en_out, branch_taken, s_out,
+  output WB_en_out, MEM_r_en_out, MEM_w_en_out, branch_taken, s_out,
   output [31:0] branch_address, alu_res,
   output [3:0] status_bits,
   output [31:0] val_rm_out,
@@ -36,7 +36,7 @@ module EXE_Stage (
     .val_2(val_2),
     .exec_cmd(exec_cmd),
     .cin(status),
-    
+
     .alu_res(alu_res),
     .status_bits(status_bits)
   );

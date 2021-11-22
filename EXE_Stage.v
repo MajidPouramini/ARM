@@ -16,6 +16,7 @@ module EXE_Stage (
   assign MEM_w_en_out = MEM_w_en_in;
   assign WB_en_out = WB_en_in;
   assign dest_out = dest_in;
+  assign val_rm_out = val_rm_in;
 
   wire MEM_write_or_read_en;
   assign MEM_write_or_read_en = MEM_r_en_in | MEM_w_en_in;

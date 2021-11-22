@@ -1,11 +1,11 @@
 module Data_Memory(
   input clk, rst, MEM_w_en, MEM_r_en, 
-  input [31:0] address, data_in
+  input [31:0] address, data_in,
 
   output [31:0] data_out
 );
 
-  `define MEMORY_START_POSITION 32'd1024;
+  `define MEMORY_START_POSITION 32'd1024
 
   reg [7:0] memory [0:255];
   wire [31:0] memory_address_0, memory_address_1, memory_address_2, memory_address_3;

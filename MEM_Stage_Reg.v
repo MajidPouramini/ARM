@@ -25,7 +25,7 @@ module MEM_Stage_Reg (
     end 
     else begin
       WB_en_out <= WB_en_out;
-      MEM_r_en_out <= mem_r_en_out;
+      MEM_r_en_out <= MEM_r_en_out;
       alu_res_out <= alu_res_out;
       dest_out <= dest_out;
       data_mem_out <= data_mem_out;

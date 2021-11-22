@@ -1,5 +1,5 @@
 module MEM_Stage (
-  input clk, rst, WB_en_in, mem_r_en_in, MEM_w_en, 
+  input clk, rst, WB_en_in, MEM_r_en_in, MEM_w_en, 
   input [3:0] dest_in,
   input [31:0] alu_res_in, val_rm,
 
@@ -9,8 +9,8 @@ module MEM_Stage (
 );
   
   assign alu_res_out = alu_res_in;
-  assign WB_en_out = wb_en_in;
-  assign mem_r_en_out = mem_r_en_in;
+  assign WB_en_out = WB_en_in;
+  assign MEM_r_en_out = MEM_r_en_in;
   assign MEM_w_en_out = MEM_w_en;
   assign dest_out = dest_in;
 

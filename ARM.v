@@ -5,7 +5,7 @@ module ARM (
   // global wires
   wire branch_taken, s, WB_en;
   wire [3:0] status_bits, WB_dest;
-  wire [31:0] branch_address;
+  wire [31:0] branch_address, WB_value;
 
   // wires between IF and IF_REG
   wire [31:0] IF_pc_out, IF_instruction_out;
@@ -47,10 +47,10 @@ module ARM (
     .clk(clk),
     .rst(rst),
     .hazard(1'b0), // TODO: require hazard detection unit
-    .WB_value(32'b0), // TODO: require WB stage 
-    .WB_wb_en(1'b0), // TODO: require WB stage
+    .WB_value(WB_value),
+    .WB_wb_en(WB_en),
     .status(status_bits),
-    .WB_dest(4'b0), // TODO: require WB stage
+    .WB_dest(WB_dest),
     .pc_in(ID_pc_in),
     .instruction(ID_instruction_in),
 
@@ -185,7 +185,7 @@ module ARM (
     .clk(clk), 
     .rst(rst), 
     .WB_en_in(MEM_WB_en_in), 
-    .mem_r_en_in(MEM_r_en_in), 
+    .MEM_r_en_in(MEM_r_en_in), 
     .MEM_w_en(MEM_w_en), 
     .dest_in(MEM_dest_in),
     .alu_res_in(MEM_alu_res_in), 
@@ -216,6 +216,16 @@ module ARM (
     .alu_res_out(WB_alu_res),
     .dest_out(WB_dest),
     .data_mem_out(WB_data_mem)
+  );
+
+  WB_Stage wb_stage(
+    .clk(clk),
+    .rst(rst),
+    .MEM_r_en(WB_MEM_r_en),
+    .alu_res(WB_alu_res),
+    .data_mem(WB_data_mem),
+
+    .WB_value(WB_value)
   );
   
 endmodule

@@ -119,7 +119,7 @@ module ARM (
   wire [3:0] EXE_status_bits, EXE_dest_out;
   wire [31:0] EXE_alu_res, EXE_val_rm_out;
   
-  EXE_Stage exe_stage(
+  EXE_Stage exe_stage (
     .clk(clk), 
     .rst(rst), 
     .MEM_r_en_in(EXE_MEM_r_en_in), 
@@ -220,7 +220,7 @@ module ARM (
     .data_mem_out(WB_data_mem)
   );
 
-  WB_Stage wb_stage(
+  WB_Stage wb_stage (
     .clk(clk),
     .rst(rst),
     .MEM_r_en(WB_MEM_r_en),
@@ -230,7 +230,7 @@ module ARM (
     .WB_value(WB_value)
   );
 
-  module Hazard_Detection_Unit(
+  Hazard_Detection_Unit hazard_detection_unit (
     .EXE_WB_en(EXE_WB_en_out),
     .MEM_WB_en(MEM_WB_en_out),
     .two_src(ID_two_src),

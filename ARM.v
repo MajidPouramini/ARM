@@ -3,8 +3,8 @@ module ARM (
 );
   
   // global wires
-  wire branch_taken, s;
-  wire [3:0] status_bits;
+  wire branch_taken, s, WB_en;
+  wire [3:0] status_bits, WB_dest;
   wire [31:0] branch_address;
 
   // wires between IF and IF_REG
@@ -154,9 +154,9 @@ module ARM (
   );
 
   // wires between EXE_REG and MEM
-  wire MEM_r_en, MEM_w_en, MEM_WB_en;
+  wire MEM_r_en_in, MEM_w_en, MEM_WB_en_in;
   wire [3:0] MEM_dest_in;
-  wire [31:0] MEM_alu_res, MEM_val_rm;
+  wire [31:0] MEM_alu_res_in, MEM_val_rm;
 
   EXE_Stage_Reg exe_stage_reg (
     .clk(clk), 
@@ -168,21 +168,55 @@ module ARM (
     .alu_res_in(EXE_alu_res),
     .val_rm_in(EXE_val_rm_out),
 
-    .WB_en_out(MEM_WB_en), 
-    .MEM_r_en_out(MEM_r_en), 
+    .WB_en_out(MEM_WB_en_in), 
+    .MEM_r_en_out(MEM_r_en_in), 
     .MEM_w_en_out(MEM_w_en),
     .dest_out(MEM_dest_in),
-    .alu_res_out(MEM_alu_res), 
+    .alu_res_out(MEM_alu_res_in), 
     .val_rm_out(MEM_val_rm)
   );
 
-  wire [31:0] MEM_pc_in, MEM_pc_out;
-  wire [31:0] WB_pc_in, WB_pc_out;
+  // wires between MEM and MEM_REG
+  wire MEM_WB_en_out, MEM_r_en_out;
+  wire [3:0] MEM_dest_out;
+  wire [31:0] MEM_alu_res_out, data_mem_out;
+
+  MEM_Stage mem_stage (
+    .clk(clk), 
+    .rst(rst), 
+    .WB_en_in(MEM_WB_en_in), 
+    .mem_r_en_in(MEM_r_en_in), 
+    .MEM_w_en(MEM_w_en), 
+    .dest_in(MEM_dest_in),
+    .alu_res_in(MEM_alu_res_in), 
+    .val_rm(MEM_val_rm),
+
+    .WB_en_out(MEM_WB_en_out), 
+    .MEM_r_en_out(MEM_r_en_out), 
+    .dest_out(MEM_dest_out),
+    .data_mem_out(data_mem_out), 
+    .alu_res_out(MEM_alu_res_out)
+  );
+
+  // wires between MEM_REG and WB
+  wire WB_MEM_r_en;
+  wire [31:0] WB_alu_res, WB_data_mem;
   
-  MEM_Stage mem_stage (clk, rst, MEM_pc_in, MEM_pc_out);
-  MEM_Stage_Reg mem_stage_reg (clk, rst, MEM_pc_out, WB_pc_in);
-  
-  WB_Stage wb_stage (clk, rst, WB_pc_in, WB_pc_out);
+  MEM_Stage_Reg mem_stage_reg (
+    .clk(clk), 
+    .rst(rst), 
+    .WB_en_in(MEM_WB_en_out), 
+    .MEM_r_en_in(MEM_r_en_out), 
+    .dest_in(MEM_dest_out),
+    .alu_res_in(MEM_alu_res_out), 
+    .data_mem_in(data_mem_out),
+
+    .WB_en_out(WB_en), 
+    .MEM_r_en_out(WB_MEM_r_en), 
+    .alu_res_out(WB_alu_res),
+    .dest_out(WB_dest),
+    .data_mem_out(WB_data_mem)
+  );
   
 endmodule
     

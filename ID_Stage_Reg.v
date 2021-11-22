@@ -12,7 +12,7 @@ module ID_Stage_Reg (
   output reg [31:0] pc_out, val_rm_out, val_rn_out
 );
 
-  always@(posedge clk, posedge rst) begin
+  always @(posedge clk, posedge rst) begin
     if (rst) begin
       status_out <= 4'b0;
       imm_out <= 1'b0;

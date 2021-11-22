@@ -41,6 +41,6 @@ module EXE_Stage (
     .status_bits(status_bits)
   );
 
-  assign branch_address = pc_in + {{6{signed_immed_24[23]}}, signed_immed_24, 2'b0};
+  assign branch_address = pc_in + { { 6{ signed_immed_24[23] } }, signed_immed_24, 2'b0 };
 
 endmodule

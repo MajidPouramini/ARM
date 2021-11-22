@@ -14,14 +14,14 @@ module Register_File (
 
   always @(negedge clk, posedge rst) begin
     if (rst) begin
-      for(i = 0; i < 15; i = i + 1)
+      for (i = 0; i < 15; i = i + 1)
         registers[i] <= i;
     end
     else if (write_back_en) begin
       registers[WB_dest] = WB_result;
     end
     else begin
-      for(i = 0; i < 15; i = i + 1)
+      for (i = 0; i < 15; i = i + 1)
         registers[i] <= registers[i];
     end
 	end

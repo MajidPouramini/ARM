@@ -7,7 +7,7 @@ module Condition_Check (
 );
 
   wire z, c, n, v;
-  assign {z, c, n, v} = status;
+  assign { z, c, n, v } = status;
 
   always @(*) begin
     result = 1'b0;

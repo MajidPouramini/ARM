@@ -21,6 +21,7 @@ module MEM_Stage (
     .MEM_r_en(MEM_r_en_in),
     .address(alu_res_in),
     .data_in(val_rm),
+    
     .data_out(data_mem_out)
   );
 

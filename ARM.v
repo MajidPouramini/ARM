@@ -3,8 +3,8 @@ module ARM (
 );
   
   // global wires
-  wire branch_taken, s, WB_en;
-  wire [3:0] status_bits, WB_dest;
+  wire branch_taken, s, WB_en, hazard;
+  wire [3:0] status_bits, WB_dest, src_1, src_2;
   wire [31:0] branch_address, WB_value;
 
   // wires between IF and IF_REG
@@ -13,7 +13,7 @@ module ARM (
   IF_Stage if_stage (
     .clk(clk),
     .rst(rst),
-    .freeze(1'b0), // TODO: require hazard detection unit
+    .freeze(hazard),
     .branch_taken(branch_taken),
     .branch_addr(branch_address),
 
@@ -27,7 +27,7 @@ module ARM (
   IF_Stage_Reg if_stage_reg (
     .clk(clk),
     .rst(rst),
-    .freeze(1'b0), // TODO: require hazard detection unit
+    .freeze(hazard),
     .flush(branch_taken),
     .pc_in(IF_pc_out),
     .instruction_in(IF_instruction_out),
@@ -46,7 +46,7 @@ module ARM (
   ID_Stage id_stage (
     .clk(clk),
     .rst(rst),
-    .hazard(1'b0), // TODO: require hazard detection unit
+    .hazard(hazard),
     .WB_value(WB_value),
     .WB_wb_en(WB_en),
     .status(status_bits),
@@ -63,6 +63,8 @@ module ARM (
     .b_out(ID_b),
     .dest(ID_dest),
     .exec_cmd_out(ID_exec_cmd),
+    .src_1(src_1),
+    .src_2(src_2),
     .shift_operand(ID_shift_operand),
     .signed_immed_24(ID_signed_immed_24),
     .pc_out(ID_pc_out),
@@ -226,6 +228,18 @@ module ARM (
     .data_mem(WB_data_mem),
 
     .WB_value(WB_value)
+  );
+
+  module Hazard_Detection_Unit(
+    .EXE_WB_en(EXE_WB_en_out),
+    .MEM_WB_en(MEM_WB_en_out),
+    .two_src(ID_two_src),
+    .src_1(src_1),
+    .src_2(src_2),
+    .EXE_dest(EXE_dest_out),
+    .MEM_dest(MEM_dest_out),
+    
+    .hazard_detected(hazard)
   );
   
 endmodule

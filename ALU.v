@@ -31,22 +31,22 @@ module ALU(
       end
       
       `ADD_ALU_CMD: begin
-        {cout, alu_res} = val_1 + val_2;
+        { cout, alu_res } = val_1 + val_2;
         v = ((val_1[31] == val_2[31]) & (alu_res[31] == ~val_1[31]));
       end
       
       `ADC_ALU_CMD: begin
-        {cout, alu_res} = val_1 + val_2 + cin;
+        { cout, alu_res } = val_1 + val_2 + cin;
         v = ((val_1[31] == val_2[31]) & (alu_res[31] == ~val_1[31]));
       end
       
       `SUB_ALU_CMD: begin
-        {cout, alu_res} = {val_1[31], val_1} - {val_2[31], val_2};
+        { cout, alu_res } = { val_1[31], val_1 } - { val_2[31], val_2 };
         v = ((val_1[31] == ~val_2[31]) & (alu_res[31] == ~val_1[31]));
       end
       
       `SBC_ALU_CMD: begin
-        {cout, alu_res} = {val_1[31], val_1} - {val_2[31], val_2} - cin;
+        { cout, alu_res } = { val_1[31], val_1 } - { val_2[31], val_2 } - cin;
         v = ((val_1[31] == ~val_2[31]) & (alu_res[31] == ~val_1[31]));
       end
       

@@ -2,8 +2,9 @@ module ID_Stage (
   input clk, rst, hazard, WB_wb_en,
   input [3:0] WB_dest, status,
   input [31:0] pc_in, instruction, WB_value,
+
   output two_src, imm_out, MEM_r_en_out, MEM_w_en_out, WB_enable_out, s_out, b_out,
-  output [3:0] dest, exec_cmd_out,
+  output [3:0] dest, exec_cmd_out, src_1, src_2,
   output [11:0] shift_operand,
   output [23:0] signed_immed_24,
   output [31:0] pc_out, val_rm, val_rn
@@ -11,9 +12,12 @@ module ID_Stage (
 
   wire [3:0] mux_1_out;
 
+  assign src_1 = mux_1_out;
+  assign src_2 = instruction[19:16]; // Rn
+
   MUX #(.LENGTH(4)) mux_1 (
-    .in_1(instruction[15:12]),
-    .in_2(instruction[3:0]),
+    .in_1(instruction[15:12]), // Rd
+    .in_2(instruction[3:0]), // Rm
     .select(MEM_w_en_out),
 
     .out(mux_1_out)
@@ -23,7 +27,7 @@ module ID_Stage (
     .clk(clk),
     .rst(rst),
     .write_back_en(WB_wb_en),
-    .src_1(instruction[19:16]),   
+    .src_1(instruction[19:16]), // Rn
     .src_2(mux_1_out),
     .WB_dest(WB_dest),
     .WB_result(WB_value),
@@ -35,10 +39,10 @@ module ID_Stage (
   wire MEM_r_en, MEM_w_en, WB_enable, s, b;
   wire [3:0] exec_cmd;
 
-  Control_Unit control_unit(
-		.mode(instruction[27:26]), 
-    .op_code(instruction[24:21]),
-		.s_in(instruction[20]),
+  Control_Unit control_unit (
+		.mode(instruction[27:26]), // Mode
+    .op_code(instruction[24:21]), // Op-Code
+		.s_in(instruction[20]), // S
 
 		.exec_cmd(exec_cmd),
 		.MEM_r_en(MEM_r_en),
@@ -61,7 +65,7 @@ module ID_Stage (
   wire condition_check_out;
 
   Condition_Check condition_check (
-    .cond(instruction[31:28]),
+    .cond(instruction[31:28]), // Cond
     .status(status),
 
     .result(condition_check_out)
@@ -90,9 +94,9 @@ module ID_Stage (
 
   assign pc_out = pc_in;
 
-  assign imm_out = instruction[25];
-  assign dest = instruction[15:12];
-  assign shift_operand = instruction[11:0];
-  assign signed_immed_24 = instruction[23:0];
+  assign imm_out = instruction[25]; // I
+  assign dest = instruction[15:12]; // Rd
+  assign shift_operand = instruction[11:0]; // Shifter Operand  
+  assign signed_immed_24 = instruction[23:0]; // Signed immed 24
   
 endmodule

@@ -4,6 +4,7 @@ module ARM (
   
   // global wires
   wire branch_taken, s;
+  wire [3:0] status_bits;
   wire [31:0] branch_address;
 
   // wires between IF and IF_REG
@@ -48,7 +49,7 @@ module ARM (
     .hazard(1'b0), // TODO: require hazard detection unit
     .WB_value(32'b0), // TODO: require WB stage 
     .WB_wb_en(1'b0), // TODO: require WB stage
-    .status(4'b0), // TODO: require status register
+    .status(status_bits),
     .WB_dest(4'b0), // TODO: require WB stage
     .pc_in(ID_pc_in),
     .instruction(ID_instruction_in),
@@ -80,7 +81,7 @@ module ARM (
     .clk(clk),
     .rst(rst),
     .flush(branch_taken),
-    .status_in(1'b0), // TODO: require status register
+    .status_in(status_bits),
     .imm_in(ID_imm),
     .MEM_r_en_in(ID_MEM_r_en), 
     .MEM_w_en_in(ID_MEM_w_en), 
@@ -132,6 +133,7 @@ module ARM (
     .val_rm_in(EXE_val_rm_in), 
     .val_rn(EXE_val_rn), 
     .pc_in(EXE_pc_in),
+
     .WB_en_out(EXE_WB_en_out), 
     .MEM_r_en_out(EXE_MEM_r_en_out), 
     .MEM_w_en_out(EXE_MEM_w_en_out), 
@@ -142,6 +144,15 @@ module ARM (
     .status_bits(EXE_status_bits),
     .val_rm_out(EXE_val_rm_out),
     .dest_out(EXE_dest_out)
+  );
+
+  Status_Register status_register (
+    .clk(clk), 
+    .rst(rst),
+    .s(s),
+    .status_bits_in(EXE_status_bits),
+
+    .status_bits_out(status_bits)
   );
 
   // wires between EXE_REG and MEM
@@ -165,7 +176,7 @@ module ARM (
     .dest_out(MEM_dest_in),
     .alu_res_out(MEM_alu_res), 
     .val_rm_out(MEM_val_rm)
-);
+  );
 
   wire [31:0] MEM_pc_in, MEM_pc_out;
   wire [31:0] WB_pc_in, WB_pc_out;

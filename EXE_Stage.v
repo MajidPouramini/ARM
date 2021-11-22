@@ -1,9 +1,9 @@
 module EXE_Stage (
-  input clk, rst, MEM_r_en_in, MEM_w_en_in, WB_en_in, imm, s_in, status
+  input clk, rst, MEM_r_en_in, MEM_w_en_in, WB_en_in, imm, s_in, status,
   input [3:0] exec_cmd, dest_in,
   input [11:0] shift_operand,
   input [23:0] signed_immed_24,
-  input [31:0] val_rm_in, val_rn, pc_in
+  input [31:0] val_rm_in, val_rn, pc_in,
 
   output WB_en_out, MEM_r_en_out, MEM_w_en_out, branch_taken, s_out,
   output [31:0] branch_address, alu_res,

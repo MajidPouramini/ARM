@@ -71,8 +71,8 @@ module ARM (
   );
 
   // wires between ID_REG and EXE
-  wire EXE_status, EXE_MEM_r_en_in, EXE_MEM_w_en_in, EXE_WB_enable_in, EXE_imm, EXE_s;
-  wire [3:0] EXE_cmd, EXE_dest_in;
+  wire EXE_MEM_r_en_in, EXE_MEM_w_en_in, EXE_WB_enable_in, EXE_imm;
+  wire [3:0] EXE_status, EXE_cmd, EXE_dest_in;
   wire [11:0] EXE_shift_operand;
   wire [23:0] EXE_signed_immed_24;
   wire [31:0] EXE_pc_in, EXE_val_rm_in, EXE_val_rn;
@@ -101,7 +101,7 @@ module ARM (
     .MEM_r_en_out(EXE_MEM_r_en_in), 
     .MEM_w_en_out(EXE_MEM_w_en_in), 
     .WB_enable_out(EXE_WB_enable_in), 
-    .s_out(EXE_s), 
+    .s_out(s), 
     .b_out(branch_taken),
     .exec_cmd_out(EXE_cmd),
     .dest_out(EXE_dest_in),
@@ -124,7 +124,6 @@ module ARM (
     .MEM_w_en_in(EXE_MEM_w_en_in), 
     .WB_en_in(EXE_WB_enable_in), 
     .imm(EXE_imm), 
-    .s_in(EXE_s), 
     .status(EXE_status),
     .exec_cmd(EXE_cmd), 
     .dest_in(EXE_dest_in),
@@ -138,7 +137,6 @@ module ARM (
     .MEM_r_en_out(EXE_MEM_r_en_out), 
     .MEM_w_en_out(EXE_MEM_w_en_out), 
     .branch_taken(branch_taken), 
-    .s_out(s),
     .branch_address(branch_address), 
     .alu_res(EXE_alu_res),
     .status_bits(EXE_status_bits),

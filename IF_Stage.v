@@ -17,7 +17,7 @@ module IF_Stage (
   PC pc_module(
     .clk(clk),
     .rst(rst),
-    .freeze(1'b0),
+    .freeze(freeze),
     .pc_in(pc_in),
 
     .pc_out(pc_out)

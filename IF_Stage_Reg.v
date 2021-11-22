@@ -13,6 +13,10 @@ module IF_Stage_Reg (
       pc_out <= 32'b0;
       instruction_out <= 32'b0;
     end
+    else if (freeze) begin
+      pc_out <= pc_out;
+      instruction_out <= instruction_out;
+    end
     else if (clk) begin
       pc_out <= pc_in;
       instruction_out <= instruction_in;

@@ -9,7 +9,7 @@ module Val2_Generator(
   
   always @(*) begin
     if (MEM_write_or_read_en) begin
-      val_2 = {20'b0, shift_operand};
+      val_2 = { 20'b0, shift_operand };
     end
     
     else if (imm) begin

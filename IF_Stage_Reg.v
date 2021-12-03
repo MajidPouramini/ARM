@@ -4,7 +4,7 @@ module IF_Stage_Reg (
   output reg [31:0] pc_out, instruction_out
 );
   
-  always@(posedge clk, posedge rst) begin
+  always @(posedge clk, posedge rst) begin
     if (rst) begin
       pc_out <= 32'b0;
       instruction_out <= 32'b0;

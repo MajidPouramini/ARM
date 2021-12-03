@@ -2,6 +2,7 @@ module Status_Register (
   input clk, rst,
   input s,
   input [3:0] status_bits_in,
+  
   output reg [3:0] status_bits_out
 );
 
@@ -12,6 +13,9 @@ module Status_Register (
 		end
 		else if (s) begin
       status_bits_out <= status_bits_in;
+    end
+    else begin
+      status_bits_out <= status_bits_out;
     end
 	end
 	

@@ -3,6 +3,7 @@
 module Condition_Check (
   input [3:0] cond,
   input [3:0] status,
+
   output reg result
 );
 
@@ -11,7 +12,7 @@ module Condition_Check (
 
   always @(*) begin
     result = 1'b0;
-    case(cond)
+    case (cond)
       `EQ: begin
         result = z;
       end
@@ -52,11 +53,15 @@ module Condition_Check (
         result = ~z & ((n & v) | (~n & ~v));
       end
       `LE: begin
-        result = z | ((n & ~v) | (~n & v));
+        result = z & ((n & ~v) | (~n & v));
       end
       `AL: begin
         result = 1'b1;
       end
+      default begin
+        result = 1'b0;
+      end
     endcase
   end
+
 endmodule

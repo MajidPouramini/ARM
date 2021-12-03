@@ -16,8 +16,8 @@ module ID_Stage (
   assign src_2 = instruction[19:16]; // Rn
 
   MUX #(.LENGTH(4)) mux_1 (
-    .in_1(instruction[15:12]), // Rd
-    .in_2(instruction[3:0]), // Rm
+    .in_1(instruction[3:0]), // Rm
+    .in_2(instruction[15:12]), // Rd
     .select(MEM_w_en_out),
 
     .out(mux_1_out)

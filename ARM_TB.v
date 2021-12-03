@@ -5,7 +5,7 @@ module TB();
   initial begin
     #15 rst = 1;
     #1 rst = 0;
-    #4000 $stop;
+    #6000 $stop;
   end
   
   always begin

@@ -6,7 +6,7 @@ module ARM (
   // global wires
   wire branch_taken, s, WB_en, hazard;
   wire [1:0] sel_src_1, sel_src_2;
-  wire [3:0] status_bits, WB_dest, src_1, src_2;
+  wire [3:0] status_bits, WB_dest, src_1, src_2, forwarding_src_1, forwarding_src_2;
   wire [31:0] branch_address, WB_value, MEM_alu_res_in;
 
   // wires between IF and IF_REG
@@ -94,6 +94,8 @@ module ARM (
     .b_in(ID_b),
     .exec_cmd_in(ID_exec_cmd), 
     .dest_in(ID_dest),
+    .src_1_in(src_1),
+    .src_2_in(src_2),
     .shift_operand_in(ID_shift_operand),
     .signed_immed_24_in(ID_signed_immed_24),
     .pc_in(ID_pc_out),
@@ -109,6 +111,8 @@ module ARM (
     .b_out(branch_taken),
     .exec_cmd_out(EXE_cmd),
     .dest_out(EXE_dest_in),
+    .src_1_out(forwarding_src_1),
+    .src_2_out(forwarding_src_2),
     .shift_operand_out(EXE_shift_operand),
     .signed_immed_24_out(EXE_signed_immed_24),
     .pc_out(EXE_pc_in),
@@ -252,8 +256,8 @@ module ARM (
 
   Forwarding_Unit forwarding_unit (
     .enable(SW[3]),
-    .src_1(src_1), 
-    .src_2(src_2),
+    .src_1(forwarding_src_1), 
+    .src_2(forwarding_src_2),
     .WB_dest(WB_dest), 
     .MEM_dest(MEM_dest_out),
     .WB_wb_en(WB_en), 

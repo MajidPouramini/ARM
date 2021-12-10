@@ -49,3 +49,9 @@
 `define EOR_ALU_CMD     4'b1000
 `define MVN_ALU_CMD     4'b1001
 
+// Shift Status
+`define LSL             2'b00       // Local Shift Left
+`define LSR             2'b01       // Local Shift Right
+`define ASR             2'b10       // Arithmatic Shift Right
+`define ROR             2'b11       // Rotate Right
+

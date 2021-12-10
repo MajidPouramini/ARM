@@ -12,8 +12,8 @@ module ID_Stage (
 
   wire [3:0] mux_1_out;
 
-  assign src_1 = mux_1_out;
-  assign src_2 = instruction[19:16]; // Rn
+  assign src_1 = instruction[19:16]; // Rn
+  assign src_2 = mux_1_out;
 
   MUX #(.LENGTH(4)) mux_1 (
     .in_1(instruction[3:0]), // Rm

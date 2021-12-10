@@ -1,3 +1,5 @@
+`include "Constants.v"
+
 module Val2_Generator(
   input [31:0] rm,
   input [11:0] shift_operand,
@@ -21,16 +23,16 @@ module Val2_Generator(
     end
 
     else begin
-      if (shift_operand[6:5] == 2'b00)
+      if (shift_operand[6:5] == `LSL)
         val_2 = rm << shift_operand[11:7];
 
-      else if (shift_operand[6:5] == 2'b01)
+      else if (shift_operand[6:5] == `LSR)
         val_2 = rm >> shift_operand[11:7];
 
-      else if (shift_operand[6:5] == 2'b10)
+      else if (shift_operand[6:5] == `ASR)
         val_2 = rm >>> shift_operand[11:7];
 
-      else if (shift_operand[6:5] == 2'b11) begin
+      else if (shift_operand[6:5] == `ROR) begin
         val_2 = rm;
         for (i = 0; i < shift_operand[11:7]; i = i + 1) begin
           val_2 = { val_2[0], val_2[31:1] };

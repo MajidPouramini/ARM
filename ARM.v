@@ -1,11 +1,13 @@
 module ARM (
-  input clk, rst
+  input clk, rst,
+  input [3:0] SW
 );
   
   // global wires
   wire branch_taken, s, WB_en, hazard;
+  wire [1:0] sel_src_1, sel_src_2;
   wire [3:0] status_bits, WB_dest, src_1, src_2;
-  wire [31:0] branch_address, WB_value;
+  wire [31:0] branch_address, WB_value, MEM_alu_res_in;
 
   // wires between IF and IF_REG
   wire [31:0] IF_pc_out, IF_instruction_out;
@@ -126,6 +128,8 @@ module ARM (
     .MEM_w_en_in(EXE_MEM_w_en_in), 
     .WB_en_in(EXE_WB_enable_in), 
     .imm(EXE_imm), 
+    .sel_src_1(sel_src_1), 
+    .sel_src_2(sel_src_2),
     .status(EXE_status),
     .exec_cmd(EXE_cmd), 
     .dest_in(EXE_dest_in),
@@ -134,6 +138,8 @@ module ARM (
     .val_rm_in(EXE_val_rm_in), 
     .val_rn(EXE_val_rn), 
     .pc_in(EXE_pc_in),
+    .WB_value(WB_value), 
+    .MEM_alu_res(MEM_alu_res_in),
 
     .WB_en_out(EXE_WB_en_out), 
     .MEM_r_en_out(EXE_MEM_r_en_out), 
@@ -158,7 +164,7 @@ module ARM (
   // wires between EXE_REG and MEM
   wire MEM_r_en_in, MEM_w_en, MEM_WB_en_in;
   wire [3:0] MEM_dest_in;
-  wire [31:0] MEM_alu_res_in, MEM_val_rm;
+  wire [31:0] MEM_val_rm;
 
   EXE_Stage_Reg exe_stage_reg (
     .clk(clk), 
@@ -231,15 +237,30 @@ module ARM (
   );
 
   Hazard_Detection_Unit hazard_detection_unit (
+    .forwarding_enable(SW[3]),
     .EXE_WB_en(EXE_WB_en_out),
     .MEM_WB_en(MEM_WB_en_out),
     .two_src(ID_two_src),
+    .EXE_MEM_r_en(EXE_MEM_r_en_in),
     .src_1(src_1),
     .src_2(src_2),
     .EXE_dest(EXE_dest_out),
     .MEM_dest(MEM_dest_out),
     
     .hazard_detected(hazard)
+  );
+
+  Forwarding_Unit forwarding_unit (
+    .enable(SW[3]),
+    .src_1(src_1), 
+    .src_2(src_2),
+    .WB_dest(WB_dest), 
+    .MEM_dest(MEM_dest_out),
+    .WB_wb_en(WB_en), 
+    .MEM_wb_en(MEM_WB_en_out),
+
+    .sel_src_1(sel_src_1), 
+    .sel_src_2(sel_src_2)
   );
   
 endmodule

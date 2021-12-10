@@ -11,7 +11,10 @@ module TB();
   always begin
     clk = #10 !clk;
   end
+
+  wire [3:0] SW;
+  assign SW[3] = 1'b0; // Enable/Disable Forwarding Unit
   
-  ARM arm_processor (clk, rst);
+  ARM arm_processor (clk, rst, SW);
   
 endmodule

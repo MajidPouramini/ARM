@@ -1,6 +1,10 @@
 module ARM (
   input clk, rst,
-  input [3:0] SW
+  input [3:0] SW,
+  
+  output SRAM_WE_N,
+  output [16:0] SRAM_ADDR, 
+  inout [31:0] SRAM_DQ 
 );
   
   // global wires

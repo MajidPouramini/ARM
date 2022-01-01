@@ -46,8 +46,8 @@ module ALU(
       end
       
       `SBC_ALU_CMD: begin
-        { cout, alu_res } = { val_1[31], val_1 } - { val_2[31], val_2 } - cin;
-        v = ((val_1[31] == ~val_2[31]) & (alu_res[31] == ~val_1[31]));
+        { cout, alu_res } = { val_1[31], val_1 } - { val_2[31], val_2 } - { 32'b0 - ~cin };
+        v = cout ^ alu_res[31];
       end
       
       `AND_ALU_CMD: begin

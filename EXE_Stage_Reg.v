@@ -1,12 +1,22 @@
 module EXE_Stage_Reg (
-  input clk, rst, WB_en_in, MEM_r_en_in, MEM_w_en_in,
-  input [3:0] dest_in,
-  input [31:0] alu_res_in, val_rm_in,
+  input             clk,
+  input             rst,
+  input             freeze,
+  input             WB_en_in,
+  input             MEM_r_en_in,
+  input             MEM_w_en_in,
+  input      [3:0]  dest_in,
+  input      [31:0] alu_res_in,
+  input      [31:0] val_rm_in,
 
-  output reg WB_en_out, MEM_r_en_out, MEM_w_en_out,
-  output reg [3:0] dest_out,
-  output reg [31:0] alu_res_out, val_rm_out
+  output reg        WB_en_out,
+  output reg        MEM_r_en_out,
+  output reg        MEM_w_en_out,
+  output reg [3:0]  dest_out,
+  output reg [31:0] alu_res_out,
+  output reg [31:0] val_rm_out
 );
+
   always @(posedge clk, posedge rst) begin
     if (rst) begin
       WB_en_out <= 1'b0;
@@ -15,6 +25,14 @@ module EXE_Stage_Reg (
       alu_res_out <= 32'b0;
       val_rm_out <= 32'b0;
       dest_out <= 4'b0;
+    end
+    else if (freeze) begin
+      WB_en_out <= WB_en_out;
+      MEM_r_en_out <= MEM_r_en_out;
+      MEM_w_en_out <= MEM_w_en_out;
+      alu_res_out <= alu_res_out;
+      val_rm_out <= val_rm_out;
+      dest_out <= dest_out;
     end
     else if (clk) begin
       WB_en_out <= WB_en_in;
@@ -33,4 +51,5 @@ module EXE_Stage_Reg (
       dest_out <= dest_out;
     end
   end
+
 endmodule

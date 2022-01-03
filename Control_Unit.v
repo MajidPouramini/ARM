@@ -1,15 +1,16 @@
 `include "Constants.v"
 
 module Control_Unit(
-  input [1:0] mode,
-  input [3:0] op_code,
-  input s_in,
-  output reg [3:0] exec_cmd,
-  output reg MEM_r_en,
-  output reg MEM_w_en,
-  output reg WB_en,
-  output reg s_out,
-  output reg b
+  input            s_in,
+  input      [1:0] mode,
+  input      [3:0] op_code,
+
+  output reg       MEM_r_en,
+  output reg       MEM_w_en,
+  output reg       WB_en,
+  output reg       s_out,
+  output reg       b,
+  output reg [3:0] exec_cmd
 );
 
   always @(op_code, mode, s_in) begin

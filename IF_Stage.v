@@ -1,7 +1,12 @@
 module IF_Stage (
-  input clk, rst, freeze, branch_taken,
-  input [31:0] branch_addr,
-  output [31:0] pc, instruction
+  input         clk,
+  input         rst,
+  input         freeze,
+  input         branch_taken,
+  input  [31:0] branch_addr,
+
+  output [31:0] pc,
+  output [31:0] instruction
 );
   
   wire[31:0] mux_in, mux_out, pc_increment, pc_in, pc_out;

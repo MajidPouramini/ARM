@@ -1,8 +1,11 @@
 module WB_Stage(
-	input clk, rst, MEM_r_en,
-	input [31:0] alu_res, data_mem,
+	input         clk,
+	input         rst,
+	input         MEM_r_en,
+	input  [31:0] alu_res,
+	input  [31:0] data_mem,
 	
-	output wire [31:0] WB_value
+	output [31:0] WB_value
 );
 
   MUX #(.LENGTH(32)) mux (

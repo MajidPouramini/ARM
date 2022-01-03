@@ -1,6 +1,8 @@
 module PC (
-  input clk, rst, freeze,
-  input [31:0] pc_in,
+  input             clk,
+  input             rst,
+  input             freeze,
+  input      [31:0] pc_in,
   
   output reg [31:0] pc_out
 );

@@ -1,10 +1,12 @@
 module Instruction_Memory (
-  input clk, rst,
-  input [31:0] address, 
+  input         clk,
+  input         rst,
+  input  [31:0] address, 
+
   output [31:0] instruction
 );
   
-  reg [31:0] memory[0:1023];
+  reg [31:0] memory [0:1023];
  
   initial begin
     memory[0]  = 32'b1110_00_1_1101_0_0000_0001_101000000001; // MOV    R1, #4096             // R1 = 4096

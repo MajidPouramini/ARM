@@ -1,7 +1,13 @@
 module IF_Stage_Reg (
-  input clk, rst, freeze, flush,
-  input [31:0] pc_in, instruction_in,
-  output reg [31:0] pc_out, instruction_out
+  input             clk,
+  input             rst,
+  input             freeze,
+  input             flush,
+  input      [31:0] pc_in,
+  input      [31:0] instruction_in,
+
+  output reg [31:0] pc_out,
+  output reg [31:0] instruction_out
 );
   
   always @(posedge clk, posedge rst) begin

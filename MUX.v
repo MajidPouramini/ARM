@@ -1,6 +1,8 @@
 module MUX #(parameter LENGTH = 1) (
-  input [LENGTH-1:0] in_1, in_2, 
-  input select,
+  input  [LENGTH-1:0] in_1, 
+  input  [LENGTH-1:0] in_2, 
+  input               select,
+
   output [LENGTH-1:0] out
 );
 
@@ -9,8 +11,11 @@ module MUX #(parameter LENGTH = 1) (
 endmodule
 
 module MUX3 #(parameter LENGTH = 1) (
-  input [LENGTH-1:0] in_1, in_2, in_3,
-  input [1:0] select,
+  input  [LENGTH-1:0] in_1,
+  input  [LENGTH-1:0] in_2,
+  input  [LENGTH-1:0] in_3,
+  input  [1:0]        select,
+
   output [LENGTH-1:0] out
 );
 

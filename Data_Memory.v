@@ -1,6 +1,10 @@
 module Data_Memory(
-  input clk, rst, MEM_w_en, MEM_r_en, 
-  input [31:0] address, data_in,
+  input             clk, 
+  input             rst, 
+  input             MEM_w_en, 
+  input             MEM_r_en, 
+  input      [31:0] address,
+  input      [31:0] data_in,
 
   output reg [31:0] data_out
 );

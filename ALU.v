@@ -1,12 +1,13 @@
 `include "Constants.v"
 
 module ALU(
-  input [31:0] val_1, val_2,
-  input [3:0] exec_cmd,
-  input cin,
+  input             cin,
+  input      [3:0]  exec_cmd,
+  input      [31:0] val_1,
+  input      [31:0] val_2,
   
-  output reg [31:0] alu_res,
-  output [3:0] status_bits
+  output     [3:0]  status_bits,
+  output reg [31:0] alu_res
 );
   
   reg v, cout;
@@ -21,7 +22,6 @@ module ALU(
     v = 1'b0;
     
     case(exec_cmd)
-      
       `MOV_ALU_CMD: begin
         alu_res = val_2;
       end
@@ -46,7 +46,7 @@ module ALU(
       end
       
       `SBC_ALU_CMD: begin
-        { cout, alu_res } = { val_1[31], val_1 } - { val_2[31], val_2 } - { 32'b0 - ~cin };
+        { cout, alu_res } = { val_1[31], val_1 } - { val_2[31], val_2 } - { 32'b0, ~cin };
         v = cout ^ alu_res[31];
       end
       
@@ -63,4 +63,5 @@ module ALU(
       end
     endcase
   end
+
 endmodule

@@ -1,14 +1,16 @@
 module ARM (
-  input clk, rst,
-  input [3:0] SW,
+  input         clk,
+  input         rst,
+  input  [3:0]  SW,
   
-  output SRAM_WE_N,
-  output [16:0] SRAM_ADDR, 
-  inout [31:0] SRAM_DQ 
+  output        SRAM_WE_N,
+  output [16:0] SRAM_ADDR,
+
+  inout  [31:0] SRAM_DQ 
 );
   
   // global wires
-  wire branch_taken, s, WB_en, hazard;
+  wire branch_taken, s, WB_en, hazard, SRAM_freeze;
   wire [1:0] sel_src_1, sel_src_2;
   wire [3:0] status_bits, WB_dest, src_1, src_2, forwarding_src_1, forwarding_src_2;
   wire [31:0] branch_address, WB_value, MEM_alu_res_in;
@@ -19,7 +21,7 @@ module ARM (
   IF_Stage if_stage (
     .clk(clk),
     .rst(rst),
-    .freeze(hazard),
+    .freeze(hazard | ~SRAM_freeze),
     .branch_taken(branch_taken),
     .branch_addr(branch_address),
 
@@ -33,7 +35,7 @@ module ARM (
   IF_Stage_Reg if_stage_reg (
     .clk(clk),
     .rst(rst),
-    .freeze(hazard),
+    .freeze(hazard | ~SRAM_freeze),
     .flush(branch_taken),
     .pc_in(IF_pc_out),
     .instruction_in(IF_instruction_out),
@@ -89,6 +91,7 @@ module ARM (
     .clk(clk),
     .rst(rst),
     .flush(branch_taken),
+    .freeze(~SRAM_freeze),
     .status_in(status_bits),
     .imm_in(ID_imm),
     .MEM_r_en_in(ID_MEM_r_en), 
@@ -177,6 +180,7 @@ module ARM (
   EXE_Stage_Reg exe_stage_reg (
     .clk(clk), 
     .rst(rst), 
+    .freeze(~SRAM_freeze),
     .WB_en_in(EXE_WB_en_out), 
     .MEM_r_en_in(EXE_MEM_r_en_out),
     .MEM_w_en_in(EXE_MEM_w_en_out),
@@ -207,11 +211,16 @@ module ARM (
     .alu_res_in(MEM_alu_res_in), 
     .val_rm(MEM_val_rm),
 
+    .ready(SRAM_freeze),
+    .SRAM_WE_N(SRAM_WE_N),
+    .SRAM_ADDR(SRAM_ADDR),
     .WB_en_out(MEM_WB_en_out), 
     .MEM_r_en_out(MEM_r_en_out), 
     .dest_out(MEM_dest_out),
     .data_mem_out(data_mem_out), 
-    .alu_res_out(MEM_alu_res_out)
+    .alu_res_out(MEM_alu_res_out),
+
+    .SRAM_DQ(SRAM_DQ)
   );
 
   // wires between MEM_REG and WB
@@ -221,6 +230,7 @@ module ARM (
   MEM_Stage_Reg mem_stage_reg (
     .clk(clk), 
     .rst(rst), 
+    .freeze(~SRAM_freeze),
     .WB_en_in(MEM_WB_en_out), 
     .MEM_r_en_in(MEM_r_en_out), 
     .dest_in(MEM_dest_out),

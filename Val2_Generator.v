@@ -1,9 +1,10 @@
 `include "Constants.v"
 
 module Val2_Generator(
-  input [31:0] rm,
-  input [11:0] shift_operand,
-  input imm, MEM_write_or_read_en,
+  input             imm,
+  input             MEM_write_or_read_en,
+  input      [11:0] shift_operand,
+  input      [31:0] rm,
   
   output reg [31:0] val_2
 );

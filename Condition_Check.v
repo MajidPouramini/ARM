@@ -1,10 +1,10 @@
 `include "Constants.v"
 
 module Condition_Check (
-  input [3:0] cond,
-  input [3:0] status,
+  input      [3:0] cond,
+  input      [3:0] status,
 
-  output reg result
+  output reg       result
 );
 
   wire z, c, n, v;
@@ -16,48 +16,63 @@ module Condition_Check (
       `EQ: begin
         result = z;
       end
+
       `NE: begin
         result = ~z;
       end
+
       `CS_HS: begin
         result = c;
       end
+
       `CC_LO: begin
         result = ~c;
       end
+
       `MI: begin
         result = n;
       end
+
       `PL: begin
         result = ~n;
       end
+
       `VS: begin
         result = v;
       end
+
       `VC: begin
         result = ~v;
       end
+
       `HI: begin
         result = c & ~z;
       end
+
       `LS: begin
         result = ~c & z;
       end
+
       `GE: begin
         result = (n & v) | (~n & ~v);
       end
+
       `LT: begin
         result = (n & ~v) | (~n & v);
       end
+
       `GT: begin
         result = ~z & ((n & v) | (~n & ~v));
       end
+
       `LE: begin
         result = z & ((n & ~v) | (~n & v));
       end
+
       `AL: begin
         result = 1'b1;
       end
+
       default begin
         result = 1'b0;
       end
